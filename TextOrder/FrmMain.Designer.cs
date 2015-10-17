@@ -29,8 +29,10 @@
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAddSlave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.masterHolderCtrl = new TextOrder.ClientHolderCtrl();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -48,11 +50,13 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.txtPort);
             this.groupBox1.Controls.Add(this.btnStop);
             this.groupBox1.Controls.Add(this.btnStart);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(408, 103);
+            this.groupBox1.Size = new System.Drawing.Size(603, 103);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Control";
@@ -100,6 +104,18 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Master";
             // 
+            // masterHolderCtrl
+            // 
+            this.masterHolderCtrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.masterHolderCtrl.Closeable = false;
+            this.masterHolderCtrl.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.masterHolderCtrl.Location = new System.Drawing.Point(19, 32);
+            this.masterHolderCtrl.Margin = new System.Windows.Forms.Padding(4);
+            this.masterHolderCtrl.Name = "masterHolderCtrl";
+            this.masterHolderCtrl.Size = new System.Drawing.Size(564, 111);
+            this.masterHolderCtrl.TabIndex = 0;
+            this.masterHolderCtrl.ClosingControl += new TextOrder.ClientHolderCtrl.ClosingControlDelegate(this.masterHolderCtrl_ClosingControl);
+            // 
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -114,17 +130,22 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Slaves";
             // 
-            // masterHolderCtrl
+            // txtPort
             // 
-            this.masterHolderCtrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.masterHolderCtrl.Closeable = false;
-            this.masterHolderCtrl.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.masterHolderCtrl.Location = new System.Drawing.Point(19, 32);
-            this.masterHolderCtrl.Margin = new System.Windows.Forms.Padding(4);
-            this.masterHolderCtrl.Name = "masterHolderCtrl";
-            this.masterHolderCtrl.Size = new System.Drawing.Size(564, 111);
-            this.masterHolderCtrl.TabIndex = 0;
-            this.masterHolderCtrl.ClosingControl += new TextOrder.ClientHolderCtrl.ClosingControlDelegate(this.masterHolderCtrl_ClosingControl);
+            this.txtPort.Location = new System.Drawing.Point(511, 42);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(73, 32);
+            this.txtPort.TabIndex = 6;
+            this.txtPort.Text = "82";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(452, 45);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 24);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Port:";
             // 
             // FrmMain
             // 
@@ -140,6 +161,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -156,6 +178,8 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private ClientHolderCtrl masterHolderCtrl;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtPort;
     }
 }
 
