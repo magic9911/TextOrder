@@ -38,7 +38,7 @@ namespace TextOrder {
         }
 
         private void btnAddSlave_Click(object sender, EventArgs e) {
-            IClientHolder clientHolder = new ClientHolder("", "");
+            IClientHolder clientHolder = new ClientHolder("");
             clients.Add(clientHolder);
             flowLayoutPanel.Controls.Add(new ClientHolderCtrl(clientHolder));
         }

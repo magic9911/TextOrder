@@ -30,8 +30,7 @@ namespace TextOrder {
         private void loopMaster() {
             while (started) {
                 // Loop Check master file
-                masterHolder.Read();
-                if (!string.IsNullOrEmpty(masterHolder.Contents)) {
+                if (!string.IsNullOrEmpty(masterHolder.Contents.RawData)) {
                     // น่าจะพบคำสั่ง  เรียกส่งคำสั่งให้ลูก
                     SendMessageToSlaves(masterHolder.Contents);
                 }
@@ -42,7 +41,7 @@ namespace TextOrder {
         }
 
 
-        public void SendMessageToSlaves(string contents) {
+        public void SendMessageToSlaves(ClientData contents) {
             foreach (var slave in slavesHolder) {
                 slave.Contents = contents;
                 var task = new Task(() => {
@@ -57,7 +56,7 @@ namespace TextOrder {
         /// </summary>
         /// <param name="client"></param>
         public void SendMessageToSlave(IClientHolder client) {
-            client.Write();
+            
         }
 
         public void StartMaster() {

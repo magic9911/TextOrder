@@ -1,11 +1,10 @@
 ﻿namespace TextOrder.Holder {
     public class ClientHolder : IClientHolder {
-        private string contents;
+        private ClientData contents;
 
         public string Name { get; set; }
-        public string FilePath { get; set; }
 
-        public string Contents {
+        public ClientData Contents {
             get {
                 return contents;
             }
@@ -15,24 +14,10 @@
             }
         }
 
-        public ClientHolder(string name, string path) {
+        public ClientHolder(string name) {
             Name = name;
-            FilePath = path;
         }
 
-        public bool Read() {
-            contents = FileUtility.ReadFile(FilePath);
-            return true;
-        }
-
-        public bool Write() {
-            return Write(contents);
-        }
-
-        public bool Write(string contents) {
-            this.contents = contents;
-            FileUtility.WriteFile(FilePath, contents);
-            return true;
-        }
+        
     }
 }

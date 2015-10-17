@@ -89,7 +89,6 @@
             this.btnBrowse.TabIndex = 3;
             this.btnBrowse.Text = "...";
             this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // ClientHolderCtrl
             // 
