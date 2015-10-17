@@ -28,5 +28,9 @@ namespace TextOrder {
             btnStop.Enabled = btnStart.Enabled;
             btnStart.Enabled = !btnStop.Enabled;
         }
+
+        private void btnAddSlave_Click(object sender, EventArgs e) {
+            flowLayoutPanel.Controls.Add(new ClientHolderCtrl());
+        }
     }
 }

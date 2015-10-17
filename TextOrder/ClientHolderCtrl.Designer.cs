@@ -44,7 +44,7 @@
             // txtName
             // 
             this.txtName.Location = new System.Drawing.Point(86, 17);
-            this.txtName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtName.Margin = new System.Windows.Forms.Padding(4);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(404, 32);
             this.txtName.TabIndex = 0;
@@ -53,7 +53,7 @@
             // btnClose
             // 
             this.btnClose.Location = new System.Drawing.Point(516, 4);
-            this.btnClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(4);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(41, 35);
             this.btnClose.TabIndex = 2;
@@ -76,9 +76,10 @@
             this.txtFilePath.Location = new System.Drawing.Point(86, 67);
             this.txtFilePath.Margin = new System.Windows.Forms.Padding(4);
             this.txtFilePath.Name = "txtFilePath";
+            this.txtFilePath.ReadOnly = true;
             this.txtFilePath.Size = new System.Drawing.Size(404, 32);
             this.txtFilePath.TabIndex = 0;
-            this.txtFilePath.TextChanged += new System.EventHandler(this.txtFilePath_TextChanged);
+            this.txtFilePath.TabStop = false;
             // 
             // btnBrowse
             // 
@@ -92,8 +93,9 @@
             // 
             // ClientHolderCtrl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.txtFilePath);
@@ -101,9 +103,9 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "ClientHolderCtrl";
-            this.Size = new System.Drawing.Size(561, 139);
+            this.Size = new System.Drawing.Size(564, 111);
             this.ResumeLayout(false);
             this.PerformLayout();
 
