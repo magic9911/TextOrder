@@ -50,6 +50,7 @@
     <Compile Include="ClientHolderCtrl.Designer.cs">
       <DependentUpon>ClientHolderCtrl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Holder\ClientData.cs" />
     <Compile Include="Holder\ClientHolder.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="FileUtility.cs" />
