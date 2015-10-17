@@ -10,15 +10,37 @@ using TextOrder.Holder;
 
 namespace TextOrder {
     public partial class ClientHolderCtrl : UserControl {
-        public ClientHolderCtrl() {
-            InitializeComponent();
-
-            Client = new ClientHolder("", "");
-        }
-
+        
+        public delegate void ClosingControlDelegate(object sender, IClientHolder client);
+        public event ClosingControlDelegate ClosingControl;
         public IClientHolder Client;
 
+        [DefaultValue(true)]
+        public bool Closeable {
+            get {
+                return btnClose.Visible;
+            }
+            set {
+                btnClose.Visible = value;
+            }
+        }
+
+        public ClientHolderCtrl() {
+            InitializeComponent();
+            if(null == Client) {
+                Client = new ClientHolder("", "");
+            }
+        }
+
+        public ClientHolderCtrl(IClientHolder client) : this() {
+            this.Client = client;
+        }
+
+
         private void btnClose_Click(object sender, EventArgs e) {
+            if (null != ClosingControl) {
+                ClosingControl(this, Client);
+            }
             Dispose();
         }
 
@@ -34,6 +56,6 @@ namespace TextOrder {
             Client.Name = txtName.Text;
         }
 
-        
+
     }
 }
