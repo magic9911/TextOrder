@@ -34,8 +34,18 @@ namespace TextOrder {
 
         public ClientHolderCtrl(IClientHolder client) : this() {
             this.Client = client;
+            Refresh();
         }
 
+        public override void Refresh() {
+            if (InvokeRequired) {
+                Invoke(new Action(() => Refresh()));
+                return;
+            }
+            //base.Refresh();
+
+            txtName.Text = Client.Account;
+        }
 
         private void btnClose_Click(object sender, EventArgs e) {
             if (null != ClosingControl) {
@@ -44,16 +54,10 @@ namespace TextOrder {
             Dispose();
         }
 
-        //private void btnBrowse_Click(object sender, EventArgs e) {
-        //    var openDlg = new OpenFileDialog();
-        //    if (openDlg.ShowDialog() == DialogResult.OK) {
-        //        Client.FilePath = openDlg.FileName;
-        //        txtFilePath.Text = Client.FilePath;
-        //    }
-        //}
+        
 
         private void txtName_TextChanged(object sender, EventArgs e) {
-            Client.Name = txtName.Text;
+            Client.Account = txtName.Text;
         }
 
 

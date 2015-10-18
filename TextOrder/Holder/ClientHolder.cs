@@ -1,10 +1,13 @@
-﻿namespace TextOrder.Holder {
+﻿using System.Collections.Generic;
+
+namespace TextOrder.Holder {
     public class ClientHolder : IClientHolder {
-        private ClientData contents;
+        private IList<ClientData> contents;
 
         public string Name { get; set; }
+        public string Account { get; set; }
 
-        public ClientData Contents {
+        public IList<ClientData> Contents {
             get {
                 return contents;
             }
@@ -16,6 +19,7 @@
 
         public ClientHolder(string name) {
             Name = name;
+            contents = new List<ClientData>();
         }
 
         

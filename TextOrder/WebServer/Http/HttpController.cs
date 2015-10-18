@@ -6,16 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
+using TextOrder;
+using TextOrder.Holder;
 
 namespace YuriNET.CoreServer.Http {
 
     internal class HttpController : HttpServer {
         private readonly Logger Logger = Logger.getInstance();
 
-        //private ConcurrentDictionary<short, Client> clients = new ConcurrentDictionary<short, Client>();
-        //private IProducerConsumerCollection<short> pool;
-        //private Server myServer;
 
+        private Controller controller;
         private Thread runnerThread;
 
         private bool maintenace = false;
@@ -24,39 +25,10 @@ namespace YuriNET.CoreServer.Http {
         //private int peekClients = 0;
         //private string password = null;
 
-        public HttpController(int port)
+        public HttpController(Controller controller, int port)
             : base(port) {
+            this.controller = controller;
         }
-
-        //public HttpController(Server server)
-        //    : base(server.SocketPort) {
-        //    myServer = server;
-        //    timeout = server.Timeout;
-        //    //maxClients = server.MaxClients;
-        //    Logger.info("Timeout : {0} secs", timeout);
-        //    //Logger.info("Max Client : {0}", maxClients);
-
-        //    //initClients();
-
-        //    Logger.info("Creating Timeout Kicker Thread...");
-        //    runnerThread = new Thread(runner);
-        //    runnerThread.Start();
-        //}
-
-        //private void initClients() {
-        //    Logger.info("Allocating Client Pool...");
-        //    // Clear
-        //    clients.Clear();
-
-        //    IList<short> allShort = new List<short>();
-        //    for (short i = short.MinValue; i < short.MaxValue; i++) {
-        //        allShort.Add(i);
-        //    }
-        //    allShort.Shuffle();
-        //    pool = new ConcurrentQueue<short>(allShort);
-
-        //    Logger.info("Took 0 secs to initialize pool.");
-        //}
 
         public override void stop() {
             base.stop();
@@ -84,6 +56,50 @@ namespace YuriNET.CoreServer.Http {
 
             string[] segments = p.URI.Segments;
             IDictionary<string, string> parameters = p.http_query;
+            IList<ClientData> masterDatas = controller.MasterHolder.Contents;
+
+            // Response text
+            StringBuilder response = new StringBuilder();
+
+            if (parameters["master"] == "true") {
+                string[] positions = parameters["positions"].Split('|');
+
+                
+                controller.MasterHolder.Account = parameters["accountid"];
+                controller.RefreshUI();
+
+                foreach (var item in positions) {
+                    ClientData find = masterDatas.Where((c) => c.RawData == item).FirstOrDefault();
+                    if (null != find) {
+                        find.MapData(item);
+                    } else {
+                        masterDatas.Add(new ClientData(item));
+                    }
+                    
+                }
+                response.Append("[OK]");
+            } else {
+                IList<IClientHolder> slaves = controller.SlavesHolder;
+
+                var account = parameters["accountid"];
+                int count = slaves.Where((c) => c.Account == account).Count();
+
+                if (count == 0) {
+                    var slave = new ClientHolder(account);
+                    slave.Account = account;
+                    slaves.Add(slave);
+                }
+
+                if (masterDatas.Count > 0) {
+                    foreach (var item in masterDatas) {
+                        response.Append(item.ToString());
+                    }
+                }else {
+                    response.Append("[EMPTY]");
+                }
+            }
+
+            controller.RefreshUISlaves();
 
 
             // data//
@@ -107,10 +123,7 @@ namespace YuriNET.CoreServer.Http {
             }
             
 
-            // Response text
-            StringBuilder response = new StringBuilder();
-            response.Append(@"<h1>Hello World</h1>");
-            
+           
 
             // Send back to client
             p.writeSuccess();

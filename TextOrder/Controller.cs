@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using TextOrder.Holder;
 using YuriNET.CoreServer.Http;
 
@@ -15,10 +16,18 @@ namespace TextOrder {
         private IList<IClientHolder> slavesHolder;
         private HttpController http;
         private bool started;
-        
 
-        public IClientHolder MasterHolder { get; set; }
-        public IList<IClientHolder> SlavesHolder;
+        public ClientHolderCtrl MasterControlHolder;
+        public IClientHolder MasterHolder {
+            get { return masterHolder; }
+            set { masterHolder = value; }
+        }
+
+        public Form Form;
+        public IList<IClientHolder> SlavesHolder {
+            get { return slavesHolder; }
+            set { slavesHolder = value; }
+        }
         public int ServerPort;
 
         public Controller(IClientHolder master, IList<IClientHolder> slaves) {
@@ -31,16 +40,26 @@ namespace TextOrder {
             ServerPort = 82;
         }
 
+        public void RefreshUI() {
+            // master 
+            MasterControlHolder.Refresh();
+        }
+
+        public void RefreshUISlaves() {
+            FrmMain form = this.Form as FrmMain;
+            form.RefreshSlaves();
+        }
+
         /// <summary>
         /// Thread
         /// </summary>
         private void loopMaster() {
             while (started) {
-                // Loop Check master file
-                if (!string.IsNullOrEmpty(masterHolder.Contents.RawData)) {
-                    // น่าจะพบคำสั่ง  เรียกส่งคำสั่งให้ลูก
-                    SendMessageToSlaves(masterHolder.Contents);
-                }
+                //// Loop Check master file
+                //if (!string.IsNullOrEmpty(masterHolder.Contents.RawData)) {
+                //    // น่าจะพบคำสั่ง  เรียกส่งคำสั่งให้ลูก
+                //    SendMessageToSlaves(masterHolder.Contents);
+                //}
 
                 // Sleep ไม่ให้ CPU สูง
                 Thread.Sleep(1);
@@ -50,11 +69,11 @@ namespace TextOrder {
 
         public void SendMessageToSlaves(ClientData contents) {
             foreach (var slave in slavesHolder) {
-                slave.Contents = contents;
-                var task = new Task(() => {
-                    SendMessageToSlave(slave);
-                });
-                task.Start();
+                //slave.Contents = contents;
+                //var task = new Task(() => {
+                //    SendMessageToSlave(slave);
+                //});
+                //task.Start();
             }
         }
 
@@ -74,7 +93,7 @@ namespace TextOrder {
 
             masterTask.Start();
 
-            http = new HttpController(ServerPort);
+            http = new HttpController(this, ServerPort);
             http.listen();
         }
 

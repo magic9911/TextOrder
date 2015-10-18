@@ -23,14 +23,14 @@ namespace TextOrder.Holder {
         public string Account { get; private set; }
 
         public ClientData(string setData) {
-            mapData(setData);
+            MapData(setData);
         }
 
         public static implicit operator ClientData(string setData) {
             return new ClientData(setData);
         }
 
-        private void mapData(string setData) {
+        public void MapData(string setData) {
             RawData = setData;
             string[] fieldValues = setData.Split(';');
 

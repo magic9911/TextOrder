@@ -25,14 +25,14 @@
         private void InitializeComponent() {
             this.btnStart = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtPort = new System.Windows.Forms.TextBox();
             this.btnStop = new System.Windows.Forms.Button();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAddSlave = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.masterHolderCtrl = new TextOrder.ClientHolderCtrl();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txtPort = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -40,9 +40,10 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(20, 31);
+            this.btnStart.Location = new System.Drawing.Point(13, 21);
+            this.btnStart.Margin = new System.Windows.Forms.Padding(2);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(181, 53);
+            this.btnStart.Size = new System.Drawing.Size(121, 35);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "Start";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -54,19 +55,41 @@
             this.groupBox1.Controls.Add(this.txtPort);
             this.groupBox1.Controls.Add(this.btnStop);
             this.groupBox1.Controls.Add(this.btnStart);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(8, 8);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(603, 103);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Size = new System.Drawing.Size(402, 69);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Control";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(301, 30);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 17);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Port:";
+            // 
+            // txtPort
+            // 
+            this.txtPort.Location = new System.Drawing.Point(341, 28);
+            this.txtPort.Margin = new System.Windows.Forms.Padding(2);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(50, 24);
+            this.txtPort.TabIndex = 6;
+            this.txtPort.Text = "82";
+            // 
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(207, 31);
+            this.btnStop.Location = new System.Drawing.Point(138, 21);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(2);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(181, 53);
+            this.btnStop.Size = new System.Drawing.Size(121, 35);
             this.btnStop.TabIndex = 1;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -79,16 +102,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel.AutoScroll = true;
             this.flowLayoutPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.flowLayoutPanel.Location = new System.Drawing.Point(6, 81);
+            this.flowLayoutPanel.Location = new System.Drawing.Point(4, 54);
+            this.flowLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(597, 459);
+            this.flowLayoutPanel.Size = new System.Drawing.Size(399, 307);
             this.flowLayoutPanel.TabIndex = 2;
             // 
             // btnAddSlave
             // 
-            this.btnAddSlave.Location = new System.Drawing.Point(20, 31);
+            this.btnAddSlave.Location = new System.Drawing.Point(13, 21);
+            this.btnAddSlave.Margin = new System.Windows.Forms.Padding(2);
             this.btnAddSlave.Name = "btnAddSlave";
-            this.btnAddSlave.Size = new System.Drawing.Size(53, 44);
+            this.btnAddSlave.Size = new System.Drawing.Size(35, 29);
             this.btnAddSlave.TabIndex = 3;
             this.btnAddSlave.Text = "+";
             this.btnAddSlave.UseVisualStyleBackColor = true;
@@ -97,9 +122,11 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.masterHolderCtrl);
-            this.groupBox2.Location = new System.Drawing.Point(13, 131);
+            this.groupBox2.Location = new System.Drawing.Point(9, 87);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(608, 157);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox2.Size = new System.Drawing.Size(405, 105);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Master";
@@ -109,10 +136,9 @@
             this.masterHolderCtrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.masterHolderCtrl.Closeable = false;
             this.masterHolderCtrl.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.masterHolderCtrl.Location = new System.Drawing.Point(19, 32);
-            this.masterHolderCtrl.Margin = new System.Windows.Forms.Padding(4);
+            this.masterHolderCtrl.Location = new System.Drawing.Point(13, 21);
             this.masterHolderCtrl.Name = "masterHolderCtrl";
-            this.masterHolderCtrl.Size = new System.Drawing.Size(564, 111);
+            this.masterHolderCtrl.Size = new System.Drawing.Size(377, 75);
             this.masterHolderCtrl.TabIndex = 0;
             this.masterHolderCtrl.ClosingControl += new TextOrder.ClientHolderCtrl.ClosingControlDelegate(this.masterHolderCtrl_ClosingControl);
             // 
@@ -123,43 +149,30 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.btnAddSlave);
             this.groupBox3.Controls.Add(this.flowLayoutPanel);
-            this.groupBox3.Location = new System.Drawing.Point(12, 294);
+            this.groupBox3.Location = new System.Drawing.Point(8, 196);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(609, 546);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBox3.Size = new System.Drawing.Size(406, 364);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Slaves";
             // 
-            // txtPort
-            // 
-            this.txtPort.Location = new System.Drawing.Point(511, 42);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(73, 32);
-            this.txtPort.TabIndex = 6;
-            this.txtPort.Text = "82";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(452, 45);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 24);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Port:";
-            // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(632, 850);
+            this.ClientSize = new System.Drawing.Size(421, 494);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Tahoma", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -177,9 +190,9 @@
         private System.Windows.Forms.Button btnAddSlave;
         private System.Windows.Forms.GroupBox groupBox2;
         private ClientHolderCtrl masterHolderCtrl;
-        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtPort;
+        private System.Windows.Forms.GroupBox groupBox3;
     }
 }
 

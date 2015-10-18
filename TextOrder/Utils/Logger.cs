@@ -22,7 +22,7 @@ namespace GoldStar.Lib.Utils {
         };
 
         public static Level DisplayLevel = Level.All;
-        public static bool WriteToFile = true;
+        public static bool WriteToFile = false;
         public static string LogFileName = Info.getProductName() + ".log";
         public static int LogFileSizeLimit = 0;
 

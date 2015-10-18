@@ -1,4 +1,6 @@
-﻿namespace TextOrder.Holder {
+﻿using System.Collections.Generic;
+
+namespace TextOrder.Holder {
     public interface IClientHolder {
         
         string Name {
@@ -6,7 +8,12 @@
             set;
         }
 
-        ClientData Contents {
+        string Account {
+            get;
+            set;
+        }
+
+        IList<ClientData> Contents {
             get;
             set;
         }
