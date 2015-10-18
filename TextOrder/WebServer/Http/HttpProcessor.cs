@@ -28,6 +28,11 @@ namespace YuriNET.CoreServer.Http {
         private Stream inputStream;
         public StreamWriter outputStream;
 
+        private Uri uri;
+        public Uri URI {
+            get { return uri; }
+        }
+        public String requestStr;
         public String http_method;
         public String http_url;
         public String http_protocol_versionstring;
@@ -91,8 +96,8 @@ namespace YuriNET.CoreServer.Http {
         }
 
         public void parseRequest() {
-            String request = streamReadLine(inputStream);
-            string[] tokens = request.Split(' ');
+            requestStr = streamReadLine(inputStream);
+            string[] tokens = requestStr.Split(' ');
             if (tokens.Length != 3) {
                 throw new Exception("invalid http request line");
             }
@@ -101,13 +106,13 @@ namespace YuriNET.CoreServer.Http {
             http_query = ToUrlCollection(http_url);
             http_protocol_versionstring = tokens[2];
 
-            Logger.debug("starting: " + request);
+            Logger.debug("starting: " + requestStr);
         }
 
         private IDictionary<String, String> ToUrlCollection(string http_url) {
             IDictionary<String, String> ht = new Dictionary<String, String>();
 
-            Uri uri = new Uri("http://server" + http_url);
+            uri = new Uri("http://server" + http_url);
             http_url = uri.Query.Substring(uri.Query.IndexOf('?') + 1);
             var queries = http_url.Split('&');
 

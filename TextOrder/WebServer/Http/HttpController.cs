@@ -78,20 +78,14 @@ namespace YuriNET.CoreServer.Http {
         //public int getPeekClients() {
         //    return peekClients;
         //}
-        private string[] setData {
-            set {
-                for (int i = 0; i < value.Length; i++) {
-                    //  ทำตัวเก็บค่าให้ ด้วย
-                }
-            }
-        }
 
         public override void handleGETRequest(HttpProcessor p) {
             // Header
-            var segments = p.http_url;
-            var parameters = p.http_query;
 
-            setData = segments.Split(';');
+            string[] segments = p.URI.Segments;
+            IDictionary<string, string> parameters = p.http_query;
+
+
             // data//
             ///  /; master = true; accountid = 8595808; time = 1445030830; positions = []; balance = 63.46; equity = 63.46; end = 0 //
             /// 
