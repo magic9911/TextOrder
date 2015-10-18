@@ -56,29 +56,39 @@ namespace YuriNET.CoreServer.Http {
 
             string[] segments = p.URI.Segments;
             IDictionary<string, string> parameters = p.http_query;
-            IList<ClientData> masterDatas = controller.MasterHolder.Contents;
+            IList<ClientData> masterPositions = controller.MasterHolder.Contents;
 
             // Response text
             StringBuilder response = new StringBuilder();
-
-            if (parameters["master"] == "true") {
+            if (parameters["mode"] == "close") {
                 string[] positions = parameters["positions"].Split('|');
 
-                
+                foreach (var item in positions) {
+                    ClientData find = masterPositions.Where((c) => c.RawData == item).FirstOrDefault();
+                    if (null != find) {
+                        masterPositions.Remove(find);
+                    }
+                }
+                response.Append("[Close-OK]");
+            } else if (parameters["mode"] == "save") {
+                string[] positions = parameters["positions"].Split('|');
+
+
                 controller.MasterHolder.Account = parameters["accountid"];
                 controller.RefreshUI();
 
                 foreach (var item in positions) {
-                    ClientData find = masterDatas.Where((c) => c.RawData == item).FirstOrDefault();
+                    ClientData find = masterPositions.Where((c) => c.RawData == item).FirstOrDefault();
                     if (null != find) {
                         find.MapData(item);
                     } else {
-                        masterDatas.Add(new ClientData(item));
+                        masterPositions.Add(new ClientData(item));
                     }
-                    
+
                 }
-                response.Append("[OK]");
-            } else {
+                response.Append("[Save-OK]");
+            } else if (parameters["mode"] == "client") {
+
                 IList<IClientHolder> slaves = controller.SlavesHolder;
 
                 var account = parameters["accountid"];
@@ -90,11 +100,18 @@ namespace YuriNET.CoreServer.Http {
                     slaves.Add(slave);
                 }
 
-                if (masterDatas.Count > 0) {
-                    foreach (var item in masterDatas) {
-                        response.Append(item.ToString());
+
+                // หา symbol ที่ต้องการ
+                string delimiter = "";
+                var findMasterPos = masterPositions.Where((mp) => mp.Symbol == parameters["symbol"]).ToList();
+                if (findMasterPos.Count > 0) {
+                    // เจอ
+                    foreach (var item in findMasterPos) {
+                        response.Append(delimiter + item.ToString());
+                        delimiter = "|";
                     }
-                }else {
+                } else {
+                    // ไม่มี
                     response.Append("[EMPTY]");
                 }
             }
