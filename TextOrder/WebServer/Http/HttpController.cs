@@ -78,13 +78,32 @@ namespace YuriNET.CoreServer.Http {
         //public int getPeekClients() {
         //    return peekClients;
         //}
+        private string[] setData {
+            set {
+                for (int i = 0; i < value.Length; i++) {
+                    //  ทำตัวเก็บค่าให้ ด้วย
+                }
+            }
+        }
 
         public override void handleGETRequest(HttpProcessor p) {
             // Header
             var segments = p.http_url;
             var parameters = p.http_query;
-            
-            
+
+            setData = segments.Split(';');
+            // data//
+            ///  /; master = true; accountid = 8595808; time = 1445030830; positions = []; balance = 63.46; equity = 63.46; end = 0 //
+            /// 
+            //
+            // positions =      int           int          double       string      double   strint      double          double        double      int
+            // positions = [OrderOpenTime;OrderTicket;OrderOpenPrice;OrderSymbol;OrderLots;OrderType;OrderStopLoss;OrderTakeProfit;OrderProfit;AccountNumber];
+            //
+            //   ถ้า master = true ให้เก็บค่า ที่ส่งมา , แสดงเวลา master บน form "time = 1445030830"
+            //   ถ้า master = false ให้แสดง ออเดอร์ ของ มาสเตอร์ คือ positions
+
+
+
             // Condition
             if (maintenace) {
                 Logger.debug("Server Maintenace !");
