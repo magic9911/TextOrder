@@ -17,6 +17,9 @@ namespace TextOrder.Holder {
             }
         }
 
+        public ClientHolder() : this("") {
+        }
+
         public ClientHolder(string name) {
             Name = name;
             contents = new List<ClientData>();

@@ -35,8 +35,10 @@ namespace YuriNET.CoreServer.Http {
                     Thread thread = new Thread(new ThreadStart(processor.process));
                     thread.Start();
                     Thread.Sleep(1);
+                } catch (ThreadAbortException) {
                 } catch (InvalidOperationException) {
                 } catch (SocketException) {
+                } catch (Exception) {
                 }
             }
         }
@@ -49,7 +51,7 @@ namespace YuriNET.CoreServer.Http {
             listening.Start();
         }
 
-        public virtual void stop() {
+        public virtual void Stop() {
             Logger.info("Shutting down HTTP Server... (Waiting for in-queue requeset finished)");
             is_active = false;
             listener.Stop();

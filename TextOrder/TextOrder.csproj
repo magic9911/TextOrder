@@ -53,7 +53,6 @@
     </Compile>
     <Compile Include="Holder\ClientData.cs" />
     <Compile Include="Holder\ClientHolder.cs" />
-    <Compile Include="Controller.cs" />
     <Compile Include="FileUtility.cs" />
     <Compile Include="FrmMain.cs">
       <SubType>Form</SubType>

@@ -121,7 +121,6 @@
             this.btnAddSlave.TabIndex = 3;
             this.btnAddSlave.Text = "+";
             this.btnAddSlave.UseVisualStyleBackColor = true;
-            this.btnAddSlave.Click += new System.EventHandler(this.btnAddSlave_Click);
             // 
             // groupBox2
             // 
@@ -198,7 +197,6 @@
             this.masterHolderCtrl.Name = "masterHolderCtrl";
             this.masterHolderCtrl.Size = new System.Drawing.Size(377, 47);
             this.masterHolderCtrl.TabIndex = 0;
-            this.masterHolderCtrl.ClosingControl += new TextOrder.ClientHolderCtrl.ClosingControlDelegate(this.masterHolderCtrl_ClosingControl);
             // 
             // FrmMain
             // 

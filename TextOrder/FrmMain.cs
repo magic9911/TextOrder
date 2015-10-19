@@ -10,18 +10,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TextOrder.Holder;
+using YuriNET.CoreServer.Http;
 
 namespace TextOrder {
     public partial class FrmMain : Form {
 
-        private Controller controller;
-        private IList<IClientHolder> clients;
+        private HttpController controller;
 
         public FrmMain() {
             InitializeComponent();
-
-            clients = new List<IClientHolder>();
-            //masterHolderCtrl.Client = new ClientHolder("");
+            
         }
         
         private void btnStart_Click(object sender, EventArgs e) {
@@ -39,35 +37,59 @@ namespace TextOrder {
             btnStart.Enabled = !btnStop.Enabled;
             stop();
         }
-
-        private void btnAddSlave_Click(object sender, EventArgs e) {
-            IClientHolder clientHolder = new ClientHolder("");
-            clients.Add(clientHolder);
-            flowLayoutPanel.Controls.Add(new ClientHolderCtrl(clientHolder));
-        }
-
-        private void masterHolderCtrl_ClosingControl(object sender, IClientHolder client) {
-            clients.Remove(client);
-        }
-
+        
         private void startOperations() {
             // Initizlial Controller
-            controller = new Controller(masterHolderCtrl.Client, clients);
-            controller.MasterControlHolder = masterHolderCtrl;
-            controller.Form = this;
-
+            
             int port;
             if (! int.TryParse(txtPort.Text, out port)) {
                 MessageBox.Show("Error port number !", Info.getProductName());
                 return;
             }
-            controller.ServerPort = port;
-            controller.StartMaster();
+
+            controller = new HttpController(port);
+            controller.OnUpdateMaster += Controller_OnUpdateMaster;
+            controller.OnUpdateSlaves += Controller_OnUpdateSlaves;
+            controller.StartListen();
+        }
+
+        private void Controller_OnUpdateSlaves(object sender, UpdateSlavesEvenArgs holders) {
+            flowLayoutPanel.SuspendLayout();
+            
+            int slaveCtrlCount = flowLayoutPanel.Controls.Count;
+            for (int i = 0,
+                rCount = holders.DataHolders.Count,
+                cCount = slaveCtrlCount; i < rCount; i++) {
+
+                if (i >= cCount) {
+                    // ถ้าปุ่มไม่พอ เพิ่ม
+                    flowLayoutPanel.Controls.Add(new ClientHolderCtrl(holders.DataHolders[i]));
+                } else {
+                    // แก้ไขที่ปุ่มเดิม
+                    // เพื่อให้ขณะ Refresh ไม่เกิด Form flicker
+                    var slaveCtrl = flowLayoutPanel.Controls[i] as ClientHolderCtrl;
+                    slaveCtrl.Client = holders.DataHolders[i];
+                }
+
+            }
+
+            // ลบ Room button ที่เหลือ (ถ้าไม่มีแล้ว)
+            int remainCtrl = flowLayoutPanel.Controls.Count - holders.DataHolders.Count;
+            if (remainCtrl > 0) {
+                for (int i = slaveCtrlCount - remainCtrl; i < slaveCtrlCount; i++) {
+                    flowLayoutPanel.Controls.RemoveAt(i);
+                }
+            }
+            flowLayoutPanel.ResumeLayout();
+        }
+
+        private void Controller_OnUpdateMaster(object sender, UpdateMasterEvenArgs holder) {
+            throw new NotImplementedException();
         }
 
         private void stop() {
             //controller.StopMaster();
-            controller.Dispose();
+            controller.Stop();
         }
 
         public void setData(int time,int order) {
@@ -79,35 +101,7 @@ namespace TextOrder {
                 Invoke(new Action(() => RefreshSlaves()));
                 return;
             }
-            flowLayoutPanel.SuspendLayout();
-
-            IList<IClientHolder> slaves = controller.SlavesHolder;
-
-            int slaveCtrlCount = flowLayoutPanel.Controls.Count;
-            for (int i = 0,
-                rCount = slaves.Count,
-                cCount = slaveCtrlCount; i < rCount; i++) {
-
-                if (i >= cCount) {
-                    // ถ้าปุ่มไม่พอ เพิ่ม
-                    flowLayoutPanel.Controls.Add(new ClientHolderCtrl(slaves[i]));
-                } else {
-                    // แก้ไขที่ปุ่มเดิม
-                    // เพื่อให้ขณะ Refresh ไม่เกิด Form flicker
-                    var slaveCtrl = flowLayoutPanel.Controls[i] as ClientHolderCtrl;
-                    slaveCtrl.Client = slaves[i];
-                }
-
-            }
-
-            // ลบ Room button ที่เหลือ (ถ้าไม่มีแล้ว)
-            int remainCtrl = flowLayoutPanel.Controls.Count - slaves.Count;
-            if (remainCtrl > 0) {
-                for (int i = slaveCtrlCount - remainCtrl; i < slaveCtrlCount; i++) {
-                    flowLayoutPanel.Controls.RemoveAt(i);
-                }
-            }
-            flowLayoutPanel.ResumeLayout();
+            
         }
 
         private void FrmMain_FormClosing(object sender, FormClosingEventArgs e) {
