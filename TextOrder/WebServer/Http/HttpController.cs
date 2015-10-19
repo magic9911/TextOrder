@@ -114,12 +114,23 @@ namespace YuriNET.CoreServer.Http {
                 if (findMasterPos.Count > 0) {
                     // เจอ
                     foreach (var item in findMasterPos) {
-                        response.Append(delimiter + item.ToString()); // ไม่ครบ 13 ตัว
+                        response.Append(delimiter + item.ToString()); 
                         delimiter = "|";
                     }
                 } else {
                     // ไม่มี
-                    response.Append("[EMPTY]");
+                    response.Append("0");
+                }
+            }else if (parameters["mode"] == "checkOrder") {
+                // หา symbol ที่ต้องการ
+                var findMasterPos = masterPositions.Where((mp) => (mp.Symbol == parameters["symbol"]) ||
+                                                                  (mp.Id == parameters["id"])).ToList();
+                if (findMasterPos.Count > 0) {
+                    // เจอ
+                    response.Append(findMasterPos[0].ToString());
+                } else {
+                    // ไม่มี
+                    response.Append("0");
                 }
             }
 
