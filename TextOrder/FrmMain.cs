@@ -70,6 +70,10 @@ namespace TextOrder {
             controller.Dispose();
         }
 
+        public void setData(int time,int order) {
+
+        }
+
         public void RefreshSlaves() {
             if (InvokeRequired) {
                 Invoke(new Action(() => RefreshSlaves()));

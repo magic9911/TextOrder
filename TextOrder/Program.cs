@@ -11,7 +11,7 @@ namespace TextOrder {
         /// </summary>
         [STAThread]
         static void Main() {
-            Logger.DisplayLevel = Logger.Level.Warn;
+            //Logger.DisplayLevel = Logger.Level.Warn;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FrmMain());

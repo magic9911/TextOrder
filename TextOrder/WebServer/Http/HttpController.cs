@@ -63,10 +63,15 @@ namespace YuriNET.CoreServer.Http {
             if (parameters["mode"] == "close") {
                 string[] positions = parameters["positions"].Split('|');
 
+                controller.MasterHolder.Account = parameters["accountid"];
+                controller.RefreshUI();
+
                 foreach (var item in positions) {
-                    ClientData find = masterPositions.Where((c) => c.RawData == item).FirstOrDefault();
-                    if (null != find) {
-                        masterPositions.Remove(find);
+                    if (item != "") {
+                        ClientData find = masterPositions.Where((c) => c.Id == item.Split(';')[0]).FirstOrDefault();
+                        if (null != find) {
+                            masterPositions.Remove(find);
+                        }
                     }
                 }
                 response.Append("[Close-OK]");
@@ -78,11 +83,13 @@ namespace YuriNET.CoreServer.Http {
                 controller.RefreshUI();
 
                 foreach (var item in positions) {
-                    ClientData find = masterPositions.Where((c) => c.RawData == item).FirstOrDefault();
-                    if (null != find) {
-                        find.MapData(item);
-                    } else {
-                        masterPositions.Add(new ClientData(item));
+                    if (item != "") { 
+                        ClientData find = masterPositions.Where((c) => c.Id == item.Split(';')[0]).FirstOrDefault();
+                        if (null != find) {
+                            find.MapData(item);
+                        } else {
+                            masterPositions.Add(new ClientData(item));
+                        }
                     }
 
                 }
@@ -107,7 +114,7 @@ namespace YuriNET.CoreServer.Http {
                 if (findMasterPos.Count > 0) {
                     // เจอ
                     foreach (var item in findMasterPos) {
-                        response.Append(delimiter + item.ToString());
+                        response.Append(delimiter + item.ToString()); // ไม่ครบ 13 ตัว
                         delimiter = "|";
                     }
                 } else {
