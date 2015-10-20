@@ -16,8 +16,8 @@ namespace YuriNET.CoreServer.Http {
         private readonly Logger Logger = Logger.getInstance();
 
         // Business
-        private IClientHolder masterHolder;
-        private IList<IClientHolder> slavesHolder;
+        private ClientHolder masterHolder;
+        //private DictData slavesHolder;
 
         // System
         private Thread runnerThread;
@@ -32,7 +32,7 @@ namespace YuriNET.CoreServer.Http {
         public event OnUpdateDelegate OnUpdateMaster;
         public delegate void OnUpdateSlavesDelegate(object sender, UpdateSlavesEvenArgs holders);
         public event OnUpdateSlavesDelegate OnUpdateSlaves;
-        
+
         /// <summary>
         /// Constructor HTTP Controller
         /// </summary>
@@ -41,7 +41,7 @@ namespace YuriNET.CoreServer.Http {
             : base(port) {
             // Initialize
             masterHolder = new ClientHolder();
-            slavesHolder = new List<IClientHolder>();
+            //slavesHolder = new DictData(); เดี๋ยวทำ เก็บ client
 
         }
 
@@ -64,7 +64,7 @@ namespace YuriNET.CoreServer.Http {
             IDictionary<string, string> parameters = p.http_query;
 
             // Business
-            IList<ClientData> masterPositions = masterHolder.Contents;
+            DictData masterPositions = masterHolder.Contents;
 
             // Response text
             StringBuilder response = new StringBuilder();
@@ -76,13 +76,8 @@ namespace YuriNET.CoreServer.Http {
                 // นำ ID จาก Positions มาสร้าง Array
                 string[] positions = parameters["positions"].Split('|').Select((ary) => ary.Split(',')[0]).ToArray();
 
-                // หา Data จาก ID ที่อยู่ใน Positions
-                var findMasterData = masterPositions
-                    .Where((pos) => positions.Contains(pos.Id))
-                    .ToList();
-
-                foreach (var clientData in findMasterData) {
-                    masterPositions.Remove(clientData); // ลบซะ
+                foreach (var position in positions) {
+                    masterPositions.Remove(position); // ลบซะ
                 }
                 response.Append("[Close-OK]");
 
@@ -93,23 +88,23 @@ namespace YuriNET.CoreServer.Http {
                 // Array สำหรับ Positions
                 string[] positions = parameters["positions"].Split('|');
 
-                foreach (var item in positions) {
-                    if (item != "") {
-                        ClientData find = masterPositions.Where((c) => c.Id == item.Split(';')[0]).FirstOrDefault();
-                        if (null != find) {
-                            find.MapData(item);
+                foreach (var position in positions) {
+                    if (position != "") {
+                        string id = position.Split(';')[0];
+
+                        if (masterPositions.ContainsKey(id)) {
+                            masterPositions[id].MapData(position);
                         } else {
-                            find = new ClientData(item);
-                            masterPositions.Add(find);
+                            masterPositions.Add(new ClientData(position));
                         }
                     }
                 }
                 response.Append("[Save-OK]");
             } else if (parameters["mode"] == "client") {
                 // Client ขอ Data
-                IList<IClientHolder> slaves = slavesHolder;
+                //DictData slaves = slavesHolder;
 
-                var account = parameters["accountid"];
+                //var account = parameters["accountid"];
                 //int count = slaves.Where((c) => c.Account == account).Count(); // นับ data ที่มี Account เหมือนกัน
 
                 //if (count == 0) {
@@ -129,7 +124,8 @@ namespace YuriNET.CoreServer.Http {
 
                 // หา symbol ที่ต้องการ
                 string delimiter = "";
-                var findMasterPos = masterPositions.Where((mp) => mp.Symbol == parameters["symbol"]).ToList();
+                var findMasterPos = masterPositions.Where((kvp) => kvp.Value.Symbol == parameters["symbol"] &&
+                                                                  kvp.Key == parameters["id"]).ToList();
                 if (findMasterPos.Count > 0) {
                     // เจอ
                     foreach (var item in findMasterPos) {
@@ -142,11 +138,11 @@ namespace YuriNET.CoreServer.Http {
                 }
             } else if (parameters["mode"] == "checkOrder") {
                 // หา symbol ที่ต้องการ
-                var findMasterPos = masterPositions.Where((mp) => (mp.Symbol == parameters["symbol"]) ||
-                                                                  (mp.Id == parameters["id"])).ToList();
-                if (findMasterPos.Count > 0) {
+                var findMasterPos = masterPositions.Where((kvp) => kvp.Value.Symbol == parameters["symbol"] &&
+                                                                  kvp.Key == parameters["id"]).FirstOrDefault();
+                if (!default(KeyValuePair<string, ClientData>).Equals(findMasterPos)) { // ใช้แทน  != null 
                     // เจอ
-                    response.Append(findMasterPos[0].ToString());
+                    response.Append(findMasterPos.Value.ToString());
                 } else {
                     // ไม่มี
                     response.Append("0");
@@ -154,12 +150,12 @@ namespace YuriNET.CoreServer.Http {
             }
 
             //ยิง Event
-            if (null != OnUpdateSlaves) {
-                OnUpdateSlaves(this, new UpdateSlavesEvenArgs() {
-                    Master = true,
-                    DataHolders = slavesHolder
-                });
-            }
+            //if (null != OnUpdateSlaves) {
+            //    OnUpdateSlaves(this, new UpdateSlavesEvenArgs() {
+            //        Master = true,
+            //        DataHolders = slavesHolder
+            //    });
+            //}
 
             // data//
             ///  /; master = true; accountid = 8595808; time = 1445030830; positions = []; balance = 63.46; equity = 63.46; end = 0 //
@@ -243,11 +239,11 @@ namespace YuriNET.CoreServer.Http {
 
     class UpdateMasterEvenArgs : EventArgs {
         public bool Master;
-        public IClientHolder DataHolder;
+        public ClientHolder DataHolder;
     }
 
     class UpdateSlavesEvenArgs : EventArgs {
         public bool Master;
-        public IList<IClientHolder> DataHolders;
+        public DictData DataHolders;
     }
 }

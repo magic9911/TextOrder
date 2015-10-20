@@ -13,7 +13,7 @@ namespace TextOrder.Holder {
             set;
         }
 
-        IList<ClientData> Contents {
+        DictData Contents {
             get;
             set;
         }

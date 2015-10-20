@@ -54,33 +54,34 @@ namespace TextOrder {
         }
 
         private void Controller_OnUpdateSlaves(object sender, UpdateSlavesEvenArgs holders) {
-            flowLayoutPanel.SuspendLayout();
-            
-            int slaveCtrlCount = flowLayoutPanel.Controls.Count;
-            for (int i = 0,
-                rCount = holders.DataHolders.Count,
-                cCount = slaveCtrlCount; i < rCount; i++) {
+            //flowLayoutPanel.SuspendLayout();
 
-                if (i >= cCount) {
-                    // ถ้าปุ่มไม่พอ เพิ่ม
-                    flowLayoutPanel.Controls.Add(new ClientHolderCtrl(holders.DataHolders[i]));
-                } else {
-                    // แก้ไขที่ปุ่มเดิม
-                    // เพื่อให้ขณะ Refresh ไม่เกิด Form flicker
-                    var slaveCtrl = flowLayoutPanel.Controls[i] as ClientHolderCtrl;
-                    slaveCtrl.Client = holders.DataHolders[i];
-                }
+            //int slaveCtrlCount = flowLayoutPanel.Controls.Count;
+            //var Iterator = holders.DataHolders.ToList();
+            //for (int i = 0,
+            //    rCount = holders.DataHolders.Count,
+            //    cCount = slaveCtrlCount; i < rCount; i++) {
 
-            }
+            //    if (i >= cCount) {
+            //        // ถ้าปุ่มไม่พอ เพิ่ม
+            //        flowLayoutPanel.Controls.Add(new ClientHolderCtrl(Iterator[i]));
+            //    } else {
+            //        // แก้ไขที่ปุ่มเดิม
+            //        // เพื่อให้ขณะ Refresh ไม่เกิด Form flicker
+            //        var slaveCtrl = flowLayoutPanel.Controls[i] as ClientHolderCtrl;
+            //        slaveCtrl.Client = Iterator[i].Value;
+            //    }
 
-            // ลบ Room button ที่เหลือ (ถ้าไม่มีแล้ว)
-            int remainCtrl = flowLayoutPanel.Controls.Count - holders.DataHolders.Count;
-            if (remainCtrl > 0) {
-                for (int i = slaveCtrlCount - remainCtrl; i < slaveCtrlCount; i++) {
-                    flowLayoutPanel.Controls.RemoveAt(i);
-                }
-            }
-            flowLayoutPanel.ResumeLayout();
+            //}
+
+            //// ลบ Room button ที่เหลือ (ถ้าไม่มีแล้ว)
+            //int remainCtrl = flowLayoutPanel.Controls.Count - holders.DataHolders.Count;
+            //if (remainCtrl > 0) {
+            //    for (int i = slaveCtrlCount - remainCtrl; i < slaveCtrlCount; i++) {
+            //        flowLayoutPanel.Controls.RemoveAt(i);
+            //    }
+            //}
+            //flowLayoutPanel.ResumeLayout();
         }
 
         private void Controller_OnUpdateMaster(object sender, UpdateMasterEvenArgs holder) {

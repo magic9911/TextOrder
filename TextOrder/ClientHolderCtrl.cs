@@ -11,9 +11,9 @@ using TextOrder.Holder;
 namespace TextOrder {
     public partial class ClientHolderCtrl : UserControl {
         
-        public delegate void ClosingControlDelegate(object sender, IClientHolder client);
+        public delegate void ClosingControlDelegate(object sender, ClientHolder client);
         public event ClosingControlDelegate ClosingControl;
-        public IClientHolder Client;
+        public ClientHolder Client;
 
         [DefaultValue(true)]
         public bool Closeable {
@@ -32,7 +32,7 @@ namespace TextOrder {
             }
         }
 
-        public ClientHolderCtrl(IClientHolder client) : this() {
+        public ClientHolderCtrl(ClientHolder client) : this() {
             this.Client = client;
             Refresh();
         }

@@ -2,12 +2,12 @@
 
 namespace TextOrder.Holder {
     public class ClientHolder : IClientHolder {
-        private IList<ClientData> contents;
+        private DictData contents;
 
         public string Name { get; set; }
         public string Account { get; set; }
 
-        public IList<ClientData> Contents {
+        public DictData Contents {
             get {
                 return contents;
             }
@@ -22,7 +22,7 @@ namespace TextOrder.Holder {
 
         public ClientHolder(string name) {
             Name = name;
-            contents = new List<ClientData>();
+            contents = new DictData();
         }
 
         
