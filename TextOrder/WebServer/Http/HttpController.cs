@@ -67,49 +67,85 @@ namespace YuriNET.CoreServer.Http {
             // Response text
             StringBuilder response = new StringBuilder();
 
-            if (parameters["mode"] == "close") {
-                string[] CloseID = parameters["positions"].Split('|').Select((ary) => ary.Split(';')[0]).ToArray();
+            if (parameters.ContainsKey("mode")) {
+                if (parameters["mode"] == "close") {
+                    string[] CloseID = parameters["positions"].Split('|').Select((ary) => ary.Split(';')[0]).ToArray();
 
-                foreach (var id in CloseID) {
-                    if (id != "") {
-                        masterData.Remove(id);
+                    foreach (var id in CloseID) {
+                        if (id != "") {
+                            masterData.Remove(id);
+                        }
                     }
-                }
-                response.Append("[Close-OK]");
+                    response.Append("[Close-OK]");
 
-            } else if (parameters["mode"] == "save") {
+                } else if (parameters["mode"] == "save") {
 
-                string[] positions = parameters["positions"].Split('|');
+                    string[] positions = parameters["positions"].Split('|');
 
-                foreach (var position in positions) {
-                    if (position != "") {
-                        string id = position.Split(';')[0];
+                    foreach (var position in positions) {
+                        if (position != "") {
+                            string id = position.Split(';')[0];
 
-                        if (masterData.ContainsKey(id)) {
-                            masterData[id]  = position;
+                            if (masterData.ContainsKey(id)) {
+                                masterData[id] = position;
+                            } else {
+                                masterData.Add(id, position);
+                            }
+                        }
+                    }
+                    response.Append("[Save-OK]");
+                } else if (parameters["mode"] == "client") {
+                    if (masterData.Count > 0) {
+                        //string id = parameters.ContainsKey("id") ? parameters["id"] : "";
+                        string Symbol = parameters.ContainsKey("symbol") ? parameters["symbol"] : "";
+                        
+                        if (/*id == "" || */Symbol == "") {
+                            p.write500();
+                            p.outputStream.WriteLine("Required symbol !");
+                            return;
+                        }
+
+                        // เหลือ ค้นตรงนี้ ถ้า symbol ส่ง แค่่อันเดียว
+                        //foreach (var data in masterData.Values) {
+                        //    response.Append(data.Value.ToString());
+                        //}
+                        var find = masterData
+                            .Values.Where((data) => {
+                                string[] dataSplit = data.Split(';');
+                                return /*dataSplit[0] == id && */dataSplit[1] == Symbol;
+                            }).ToArray();
+                        if (find.Length > 0) {
+                            string delimiter = "";
+                            foreach (var position in find) {
+                                response.Append(delimiter);
+                                response.Append(position);
+                                delimiter = "|";
+                            }
                         } else {
-                            masterData.Add(id,position);
+                            response.AppendLine("Symbol : " + Symbol + " not found");
                         }
                     }
-                }
-                response.Append("[Save-OK]");
-            } else if (parameters["mode"] == "client") {
-                if (masterData.Count > 0) {
-                    string Symbol = parameters["symbol"];
-                    // เหลือ ค้นตรงนี้ ถ้า symbol ส่ง แค่่อันเดียว
-                    foreach (var data in masterData) {
-                            response.Append(data.Value.ToString());
-                    }
-                }
 
-            } else if (parameters["mode"] == "checkOrder") {
-                if (masterData.Count > 0) {
-                    string OrderID = parameters["id"];
+                } else if (parameters["mode"] == "checkOrder") {
+                    if (masterData.Count > 0) {
+                        string OrderID = parameters["id"];
                         if (OrderID != "") {
-                           response.Append(masterData[OrderID].ToString());
+                            response.Append(masterData[OrderID].ToString());
                         }
+                    }
+                } else {
+                    // Default
+                    p.write500();
+                    p.outputStream.WriteLine("<h1>500 Internal Server Error</h1>");
+                    return;
                 }
+            } else {
+                // Default
+                p.write404();
+                p.outputStream.WriteLine("<h1>404 Page not found</h1>");
+                return;
             }
+
 
             //ยิง Event
             //if (null != OnUpdateSlaves) {
