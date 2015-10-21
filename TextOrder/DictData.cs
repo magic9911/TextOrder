@@ -5,9 +5,9 @@ using System.Text;
 using TextOrder.Holder;
 
 namespace TextOrder {
-    public class DictData : Dictionary<string, ClientData> {
-        public void Add(ClientData holder) {
-            base.Add(holder.Account, holder);
+    public class DictData : Dictionary<string, string> {
+        public void Add(string id,string positions) {
+            base.Add(id, positions);
         }
     }
 }

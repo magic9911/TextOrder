@@ -16,7 +16,7 @@ namespace YuriNET.CoreServer.Http {
         private readonly Logger Logger = Logger.getInstance();
 
         // Business
-        private ClientHolder masterHolder;
+        private DictData masterData;
         //private DictData slavesHolder;
 
         // System
@@ -40,7 +40,7 @@ namespace YuriNET.CoreServer.Http {
         public HttpController(int port)
             : base(port) {
             // Initialize
-            masterHolder = new ClientHolder();
+            masterData = new DictData();
             //slavesHolder = new DictData(); เดี๋ยวทำ เก็บ client
 
         }
@@ -63,89 +63,51 @@ namespace YuriNET.CoreServer.Http {
             string[] segments = p.URI.Segments;
             IDictionary<string, string> parameters = p.http_query;
 
-            // Business
-            DictData masterPositions = masterHolder.Contents;
 
             // Response text
             StringBuilder response = new StringBuilder();
 
             if (parameters["mode"] == "close") {
-                // Master สั่งปิด Close
-                masterHolder.Account = parameters["accountid"]; // เผื่อนิดหน่อย
+                string[] CloseID = parameters["positions"].Split('|').Select((ary) => ary.Split(';')[0]).ToArray();
 
-                // นำ ID จาก Positions มาสร้าง Array
-                string[] positions = parameters["positions"].Split('|').Select((ary) => ary.Split(',')[0]).ToArray();
-
-                foreach (var position in positions) {
-                    masterPositions.Remove(position); // ลบซะ
+                foreach (var id in CloseID) {
+                    if (id != "") {
+                        masterData.Remove(id);
+                    }
                 }
                 response.Append("[Close-OK]");
 
             } else if (parameters["mode"] == "save") {
-                // Master Save
-                masterHolder.Account = parameters["accountid"];
 
-                // Array สำหรับ Positions
                 string[] positions = parameters["positions"].Split('|');
 
                 foreach (var position in positions) {
                     if (position != "") {
                         string id = position.Split(';')[0];
 
-                        if (masterPositions.ContainsKey(id)) {
-                            masterPositions[id].MapData(position);
+                        if (masterData.ContainsKey(id)) {
+                            masterData[id]  = position;
                         } else {
-                            masterPositions.Add(new ClientData(position));
+                            masterData.Add(id,position);
                         }
                     }
                 }
                 response.Append("[Save-OK]");
             } else if (parameters["mode"] == "client") {
-                // Client ขอ Data
-                //DictData slaves = slavesHolder;
-
-                //var account = parameters["accountid"];
-                //int count = slaves.Where((c) => c.Account == account).Count(); // นับ data ที่มี Account เหมือนกัน
-
-                //if (count == 0) {
-                //    // สร้างและเพิ่มใหม่
-                //    var slave = new ClientHolder(account);
-                //    slave.Account = account;
-                //    slaves.Add(slave); //เพิ่ม
-
-                //    // ยิง Event
-                //    if (null != OnUpdateSlave) {
-                //        OnUpdateSlave(this, new UpdateEvenArgs() {
-                //            Master = false,
-                //            DataHolder = slave
-                //        });
-                //    }
-                //}
-
-                // หา symbol ที่ต้องการ
-                string delimiter = "";
-                var findMasterPos = masterPositions.Where((kvp) => kvp.Value.Symbol == parameters["symbol"] &&
-                                                                  kvp.Key == parameters["id"]).ToList();
-                if (findMasterPos.Count > 0) {
-                    // เจอ
-                    foreach (var item in findMasterPos) {
-                        response.Append(delimiter + item.ToString());
-                        delimiter = "|";
+                if (masterData.Count > 0) {
+                    string Symbol = parameters["symbol"];
+                    // เหลือ ค้นตรงนี้ ถ้า symbol ส่ง แค่่อันเดียว
+                    foreach (var data in masterData) {
+                            response.Append(data.Value.ToString());
                     }
-                } else {
-                    // ไม่มี
-                    response.Append("0");
                 }
+
             } else if (parameters["mode"] == "checkOrder") {
-                // หา symbol ที่ต้องการ
-                var findMasterPos = masterPositions.Where((kvp) => kvp.Value.Symbol == parameters["symbol"] &&
-                                                                  kvp.Key == parameters["id"]).FirstOrDefault();
-                if (!default(KeyValuePair<string, ClientData>).Equals(findMasterPos)) { // ใช้แทน  != null 
-                    // เจอ
-                    response.Append(findMasterPos.Value.ToString());
-                } else {
-                    // ไม่มี
-                    response.Append("0");
+                if (masterData.Count > 0) {
+                    string OrderID = parameters["id"];
+                        if (OrderID != "") {
+                           response.Append(masterData[OrderID].ToString());
+                        }
                 }
             }
 

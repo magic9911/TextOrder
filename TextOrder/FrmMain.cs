@@ -85,8 +85,8 @@ namespace TextOrder {
         }
 
         private void Controller_OnUpdateMaster(object sender, UpdateMasterEvenArgs holder) {
-            masterHolderCtrl.Client = holder.DataHolder;
-            masterHolderCtrl.Refresh();
+            //masterHolderCtrl.Client = holder.DataHolder;
+            //masterHolderCtrl.Refresh();
         }
 
         private void stop() {
